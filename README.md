@@ -1,4 +1,4 @@
-# :trollface:  file-share
+# :trollface: nimportequoi-nodejs-firebase-angular
 Projet d'utilisation de firebase
 
 Projet initial d'utiliser firebase, avec node.js. 
