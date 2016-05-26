@@ -1,11 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="TrollTimeTraveler">
 	<head>
-		<title>Application</title>
+	<meta charset="utf-8">
+		<title>Trololol</title>
 
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
-		<!-- Latest compiled and minified JavaScript -->
-		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
 		<script src="https://www.gstatic.com/firebasejs/live/3.0/firebase.js"></script>
 		<script src="bundle.js"></script>
 
@@ -13,10 +11,132 @@
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
 		<!-- Optional theme -->
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+
+		<style media="screen">
+			[ng\:cloak],
+			[ng-cloak],
+			[data-ng-cloak],
+			[x-ng-cloak],
+			.ng-cloak,
+			.x-ng-cloak {
+			display: none !important;
+			}
+
+			.troll {
+			background: transparent url('https://openclipart.org/image/2400px/svg_to_png/130795/Trollface.png') 50% 50% no-repeat;
+			position: absolute;
+			left: 0px;
+			top: 0px;
+			width: 100px;
+			height: 100px;
+			background-size: contain;
+			}
+
+			input{
+			width: 200px !important;
+			}
+		</style>
+
 	</head>
 	<body>
-		<header class="container">
-			<h1>Hello world !</h1>
-		</header>
+
+	<div class="container">
+		<h1>Hello world !</h1>
+
+		<br/>
+		<blockquote>
+			<p>Bougez la trollface avec les flèches de votre clavier (haut, bas, gauhe, droite). Tous ses mouvements seront historisés. En effet, si vous bougez le curseur,
+			vous retrouverez tous vos anciens mouvements ! Parfaitement inutile !</p>
+		</blockquote>
+	</div>
+
+	<br/>
+	<br/>
+
+	<div ng-cloak ng-controller="TrollCtrl" class="container">
+		<input type="range" ng-model="slideValue" min="0" max="{{timetraveling.length-1}}" ng-change="onTimeTraveling(slideValue)" step="1"/>
+		<div class="troll" ng-style="{top:app.top, left: app.left}" ng-move></div>
+		{{$scope.timetraveling}}
+	</div>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.5/i18n/angular-locale_fr.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-translate/2.10.0/angular-translate.js"></script>
+
+	<!-- https://github.com/Zmetser/angular-currency-filter -->
+	<script src="bower_components/angular-currency-filter/src/currency-filter.js"></script>
+
+	<script src="bower_components/messageformat/messageformat.js"></script>
+	<script src="bower_components/angular-translate-interpolation-messageformat/angular-translate-interpolation-messageformat.js"></script>
+
+	<script type="text/javascript">
+		angular.module('TrollTimeTraveler', []);
+
+		angular.module('TrollTimeTraveler').directive('ngMove', function() {
+			return function(scope, element, attrs) {
+				function move() {
+					element.css('left', `${scope.troll.left}px`);
+					element.css('top', `${scope.troll.top}px`);
+				}
+				scope.$watch('troll', function(v){
+					move();
+				});
+
+				move();
+
+				angular.element(window).on("keydown keypress", function(event) {
+					scope.$apply(function() {
+						if(event.code === 'ArrowLeft') {
+							scope.troll.left--;
+						}
+						if(event.code === 'ArrowRight') {
+							scope.troll.left++;
+						}
+						if(event.code === 'ArrowUp') {
+							scope.troll.top--;
+						}
+						if(event.code === 'ArrowDown') {
+							scope.troll.top++;
+						}
+
+						move();
+					});
+				});
+			};
+		});
+
+		angular.module('TrollTimeTraveler').controller('TrollCtrl', function($rootScope, $scope) {
+			$scope.troll = {
+				left: 100,
+				top:200
+			};
+			$scope.slideValue = 0;
+			$scope.timetraveling = [];
+
+			$scope.onTimeTraveling = function(index){
+				if(!$scope.timetraveling[index] || equals($scope.troll, $scope.timetraveling[index])) {
+					return;
+				}
+				$scope.troll = $scope.timetraveling[index];
+			};
+
+			function equals(left, right){
+				return left && right && left.left === right.left && left.top === right.top;
+			}
+
+			$scope.$watch(function(aa) {
+				console.log('scope updated', arguments);
+
+				if(!equals($scope.timetraveling[$scope.timetraveling.length -1], $scope.troll)) {
+					$scope.timetraveling.push({
+						left:$scope.troll.left,
+						top:$scope.troll.top
+					});
+					$scope.slideValue = $scope.timetraveling.length-1;
+				}
+			});
+		});
+	</script>
+
 </body>
 </html>
