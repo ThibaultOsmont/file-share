@@ -30881,16 +30881,29 @@ module.exports = angular;
 },{}],4:[function(require,module,exports){
 'use strict';
 
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 require('angular');
 
 // Initialize Firebase
 var config = {
-	apiKey: "AIzaSyB_5ddDEb4EqftuMEOZ2owWVW2SYsPQMhE",
-	authDomain: "project-file-share-1.firebaseapp.com",
-	databaseURL: "https://project-file-share-1.firebaseio.com",
-	storageBucket: "project-file-share-1.appspot.com"
+  // LA CONFIGURATION DE VOTRE PROJET ICI (apiKey, authDomain, databaseURL)
+  apiKey: "AIzaSyB_5ddDEb4EqftuMEOZ2owWVW2SYsPQMhE",
+  authDomain: "project-file-share-1.firebaseapp.com",
+  databaseURL: "https://project-file-share-1.firebaseio.com",
+  storageBucket: ""
 };
+
 firebase.initializeApp(config);
+
+var postKey = firebase.database().ref().child('posts').push().key;
+firebase.database().ref().update(_defineProperty({}, '/posts/' + postKey, {
+  body: 'hello world'
+})).then(function (res) {
+  return console.log('post created', res);
+}, function (err) {
+  return console.error('could not create post', err);
+});
 
 var restangular = require('restangular');
 console.log('Hello world');

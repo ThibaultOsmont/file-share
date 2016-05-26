@@ -1,5 +1,6 @@
 {
   "projects": {
-    "fileShare": "project-file-share-1"
+    "fileShare": "project-file-share-1",
+    "default": "project-file-share-1"
   }
 }
