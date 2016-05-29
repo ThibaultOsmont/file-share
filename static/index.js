@@ -45,6 +45,7 @@ firebase.database().ref().update({
 	    	study		: "Congratulations ! You have just graduated ! What now ?",
 	    	phd			: "WOW ! Such knowledge ! Much respect !",
 	    	career		: "OK good luck in life now !",
+	    	workinglife	: "Work hard, party hard !",
 	    	pension		: "You have worked hard enough now. You can have a rest now...",
 	    	death		: "Rest in peace..."
 	  	},
